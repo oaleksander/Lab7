@@ -12,11 +12,15 @@ import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.Date;
 
+/**
+ * Main client class
+ * @see Server
+ */
 public class Client {
 
     private static final String[] dragonCommands = {"insert", "update", "replace_if_greater_age"};
     private static final InetSocketAddress address = new InetSocketAddress("localhost", 3333);
-    private static User user = new User("notYetLoggedInUser","DEADBEEF");
+    private static User user = new User("notYetLoggedInUser","");
     private static ByteArrayOutputStream byteArrayOutputStream;
     private static ObjectOutput objectOutput;
     private static DatagramSocket datagramSocket = null;
@@ -29,8 +33,6 @@ public class Client {
      * @see Server
      */
     public static void main(String[] args) {
-
-
         BufferedReader cin = new BufferedReader(new InputStreamReader(System.in));
 
         String username;
@@ -45,8 +47,6 @@ public class Client {
             e.printStackTrace();
             return;
         }
-
-
 
         CommandReader commandReader = new CommandReader(cin);
         byteArrayOutputStream = new ByteArrayOutputStream();
@@ -85,8 +85,6 @@ public class Client {
                 }
             }
         }
-
-
     }
 
     /**

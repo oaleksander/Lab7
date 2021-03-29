@@ -118,6 +118,11 @@ public class CommandReader {
             this.commandString = CommandString;
         }
 
+        /**
+         * Empty command constructor
+         *
+         * @param user User
+         */
         public Command(User user) {
             this.user = user;
         }

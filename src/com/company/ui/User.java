@@ -6,15 +6,27 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * Class that is needed to store users
+ */
 public class User implements Serializable {
 
     private final String username;
     private final byte[] passwordMD5;
 
+    /**
+     * Username-only constructor
+     * @param username username
+     */
     public User(String username){
         this(username,"");
     }
 
+    /**
+     * Default constructor
+     * @param username username
+     * @param password password
+     */
     public User(String username, String password) {
         this.username = username;
         byte[] finalPasswordMD5;
@@ -42,10 +54,18 @@ public class User implements Serializable {
         return result;
     }
 
+    /**
+     * Username getter
+     * @return usernamg
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Password getter
+     * @return password in MD5 format
+     */
     public byte[] getPasswordMD5() {
         return passwordMD5;
     }

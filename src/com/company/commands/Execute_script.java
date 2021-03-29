@@ -57,7 +57,7 @@ public class Execute_script implements CommandAction {
                                 .replaceAll("\\breplace_if_greater\\b", "replace_if_greater_csv")
                                 .replaceAll("\\bupdate\\b", "update_csv")
                                 .replaceAll("\\binsert\\b", "insert_csv");
-                        commandExecutor.execute(CommandReader.readCommandFromString(Server.internalUser, formattedLine));
+                        commandExecutor.executeCommand(CommandReader.readCommandFromString(Server.internalUser, formattedLine));
                     });
             fileReader.close();
         } catch (FileNotFoundException e) {

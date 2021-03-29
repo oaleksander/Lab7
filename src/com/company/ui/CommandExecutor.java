@@ -130,11 +130,12 @@ public class CommandExecutor {
      *
      * @param command User command
      */
-    public void execute(CommandReader.Command command) {
+    public void executeCommand(CommandReader.Command command) {
         AtomicReference<String> response = new AtomicReference<>("Command gave no response.");
-        if(registeredUsers.stream().noneMatch(user -> user.equals(command.user)) && !command.commandString.equals("register"))
+        if(registeredUsers.stream().noneMatch(user -> user.equals(command.user)) && !command.commandString.equals("register")) {
             response.set("Unauthorized access denied.");
-        if (Arrays.stream(availableCommands).parallel().noneMatch(availableCommand -> availableCommand.getLabel().equals(command.commandString))) {
+        } else {
+            if (Arrays.stream(availableCommands).parallel().noneMatch(availableCommand -> availableCommand.getLabel().equals(command.commandString))) {
             response.set("Unknown command \"" + command.commandString + "\". try \"help\" for list of commands");
         } else
             try {
@@ -148,6 +149,7 @@ public class CommandExecutor {
                 response.set("Unexpected error: " + e.getMessage() + ". This is a bug!");
                 e.printStackTrace();
             }
+        }
         printStream.println(response.get());
     }
 }

@@ -17,7 +17,8 @@ import java.util.Date;
 import java.util.concurrent.*;
 
 /**
- * Main client class
+ * Main server class
+ * @see Client
  */
 public class Server {
 
@@ -61,7 +62,7 @@ public class Server {
                     String line;
                     if (localInput.ready())
                         if ((line = localInput.readLine()) != null)
-                            localExecutor.execute(CommandReader.readCommandFromString(internalUser,line));
+                            localExecutor.executeCommand(CommandReader.readCommandFromString(internalUser,line));
                     selector.select(1500);
                     selector.selectedKeys().stream().parallel().forEach(selectionKey ->
                     {
@@ -107,10 +108,10 @@ public class Server {
         byte[] response;
         try {
             CommandReader.Command command = (CommandReader.Command) iStream.readObject();
-            System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "]" + address.toString() + ": " + command.toString() + ".");
+            System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + command.user.getUsername() + address.toString() + ": " + command.toString() + ".");
             //Отправляем данные клиенту
             try {
-                userExecutor.execute(command);
+                userExecutor.executeCommand(command);
                 response = outputStream.toByteArray();
                 outputStream.reset();
             } catch (IllegalArgumentException e) {
