@@ -91,7 +91,6 @@ public class Server {
 
     /**
      * Processes a command from client
-   //  * @param buffer Byte buffer to put data to
      * @param key Selection key
      * @throws IOException If problem occurred while sending data to client
      * @return Server response

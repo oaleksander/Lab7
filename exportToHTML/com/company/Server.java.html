@@ -1,0 +1,179 @@
+<html>
+<head>
+<title>Server.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #808080; font-style: italic;}
+.s3 { color: #808080; font-weight: bold; font-style: italic;}
+.s4 { color: #008000; font-weight: bold;}
+.s5 { color: #0000ff;}
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Server.java</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0">package </span>com.company;
+<a name="l2"><span class="ln">2    </span></a>
+<a name="l3"><span class="ln">3    </span></a><span class="s0">import <a href="../../com/company/commands/Read.java.html">com.company.commands.Read</a></span>;
+<a name="l4"><span class="ln">4    </span></a><span class="s0">import <a href="../../com/company/ui/CommandExecutor.java.html">com.company.ui.CommandExecutor</a></span>;
+<a name="l5"><span class="ln">5    </span></a><span class="s0">import <a href="../../com/company/ui/CommandReader.java.html">com.company.ui.CommandReader</a></span>;
+<a name="l6"><span class="ln">6    </span></a><span class="s0">import <a href="../../com/company/ui/User.java.html">com.company.ui.User</a></span>;
+<a name="l7"><span class="ln">7    </span></a>
+<a name="l8"><span class="ln">8    </span></a><span class="s0">import </span>java.io.*;
+<a name="l9"><span class="ln">9    </span></a><span class="s0">import </span>java.net.InetSocketAddress;
+<a name="l10"><span class="ln">10   </span></a><span class="s0">import </span>java.net.SocketAddress;
+<a name="l11"><span class="ln">11   </span></a><span class="s0">import </span>java.nio.ByteBuffer;
+<a name="l12"><span class="ln">12   </span></a><span class="s0">import </span>java.nio.channels.DatagramChannel;
+<a name="l13"><span class="ln">13   </span></a><span class="s0">import </span>java.nio.channels.SelectionKey;
+<a name="l14"><span class="ln">14   </span></a><span class="s0">import </span>java.nio.channels.Selector;
+<a name="l15"><span class="ln">15   </span></a><span class="s0">import </span>java.text.SimpleDateFormat;
+<a name="l16"><span class="ln">16   </span></a><span class="s0">import </span>java.util.Date;
+<a name="l17"><span class="ln">17   </span></a><span class="s0">import </span>java.util.concurrent.*;
+<a name="l18"><span class="ln">18   </span></a>
+<a name="l19"><span class="ln">19   </span></a><span class="s2">/**</span>
+<a name="l20"><span class="ln">20   </span></a> <span class="s2">* Main server class</span>
+<a name="l21"><span class="ln">21   </span></a> <span class="s2">* </span><span class="s3">@see <a href="Client.java.html">Client</a></span>
+<a name="l22"><span class="ln">22   </span></a> <span class="s2">*/</span>
+<a name="l23"><span class="ln">23   </span></a><span class="s0">public class </span>Server {
+<a name="l24"><span class="ln">24   </span></a>
+<a name="l25"><span class="ln">25   </span></a>    <span class="s0">private static final </span>ByteArrayOutputStream outputStream = <span class="s0">new </span>ByteArrayOutputStream();
+<a name="l26"><span class="ln">26   </span></a>    <span class="s0">private static final </span>PrintStream serverResponseStream = <span class="s0">new </span>PrintStream(outputStream);
+<a name="l27"><span class="ln">27   </span></a>    <span class="s0">private static final <a href="../../com/company/ui/CommandExecutor.java.html">CommandExecutor</a> </span>localExecutor = <span class="s0">new <a href="../../com/company/ui/CommandExecutor.java.html">CommandExecutor</a></span>(<a href="../../com/company/ui/CommandExecutor.java.html">CommandExecutor</a>.allCommands, System.out);
+<a name="l28"><span class="ln">28   </span></a>    <span class="s0">private static final <a href="../../com/company/ui/CommandExecutor.java.html">CommandExecutor</a> </span>userExecutor = <span class="s0">new <a href="../../com/company/ui/CommandExecutor.java.html">CommandExecutor</a></span>(<a href="../../com/company/ui/CommandExecutor.java.html">CommandExecutor</a>.userCommands, serverResponseStream);
+<a name="l29"><span class="ln">29   </span></a>    <span class="s0">public static final <a href="../../com/company/ui/User.java.html">User</a> </span>internalUser = <span class="s0">new <a href="../../com/company/ui/User.java.html">User</a></span>(<span class="s4">&quot;admin&quot;</span>,<span class="s4">&quot;admin&quot;</span>);
+<a name="l30"><span class="ln">30   </span></a>
+<a name="l31"><span class="ln">31   </span></a>    <span class="s2">/**</span>
+<a name="l32"><span class="ln">32   </span></a>     <span class="s2">* Main server function</span>
+<a name="l33"><span class="ln">33   </span></a>     <span class="s2">*</span>
+<a name="l34"><span class="ln">34   </span></a>     <span class="s2">* </span><span class="s3">@param </span><span class="s2">args filename</span>
+<a name="l35"><span class="ln">35   </span></a>     <span class="s2">* </span><span class="s3">@see <a href="../../com/company/ui/CommandExecutor.java.html">CommandExecutor</a></span>
+<a name="l36"><span class="ln">36   </span></a>     <span class="s2">* </span><span class="s3">@see <a href="Client.java.html">Client</a></span>
+<a name="l37"><span class="ln">37   </span></a>     <span class="s2">*/</span>
+<a name="l38"><span class="ln">38   </span></a>    <span class="s0">public static void </span>main(String[] args) {
+<a name="l39"><span class="ln">39   </span></a>        System.out.println(<span class="s4">&quot;Starting Server...&quot;</span>);
+<a name="l40"><span class="ln">40   </span></a>        System.out.println(<span class="s4">&quot;Reading collection from file...&quot;</span>);
+<a name="l41"><span class="ln">41   </span></a>        readCollectionFromFile(args);
+<a name="l42"><span class="ln">42   </span></a>        BufferedReader localInput = <span class="s0">new </span>BufferedReader(<span class="s0">new </span>InputStreamReader(System.in));
+<a name="l43"><span class="ln">43   </span></a>        Selector selector = <span class="s0">null</span>;
+<a name="l44"><span class="ln">44   </span></a>        ByteBuffer byteBuffer = ByteBuffer.allocate(<span class="s5">65536</span>);
+<a name="l45"><span class="ln">45   </span></a>        <span class="s0">try </span>{
+<a name="l46"><span class="ln">46   </span></a>            selector = Selector.open();
+<a name="l47"><span class="ln">47   </span></a>            selector.wakeup();
+<a name="l48"><span class="ln">48   </span></a>            DatagramChannel datagramChannel = DatagramChannel.open();
+<a name="l49"><span class="ln">49   </span></a>            datagramChannel.bind(<span class="s0">new </span>InetSocketAddress(<span class="s4">&quot;localhost&quot;</span>, <span class="s5">3333</span>));
+<a name="l50"><span class="ln">50   </span></a>            datagramChannel.configureBlocking(<span class="s0">false</span>);
+<a name="l51"><span class="ln">51   </span></a>            datagramChannel.register(selector, SelectionKey.OP_READ);
+<a name="l52"><span class="ln">52   </span></a>        } <span class="s0">catch </span>(IOException e) {
+<a name="l53"><span class="ln">53   </span></a>            System.err.println(<span class="s4">&quot;Failed to start server.&quot;</span>);
+<a name="l54"><span class="ln">54   </span></a>            e.printStackTrace();
+<a name="l55"><span class="ln">55   </span></a>            System.exit(-<span class="s5">1</span>);
+<a name="l56"><span class="ln">56   </span></a>        }
+<a name="l57"><span class="ln">57   </span></a>        ExecutorService responseExecutorService = Executors.newCachedThreadPool();
+<a name="l58"><span class="ln">58   </span></a>        System.out.println(<span class="s4">&quot;Server is active.&quot;</span>);
+<a name="l59"><span class="ln">59   </span></a>        <span class="s0">try </span>{
+<a name="l60"><span class="ln">60   </span></a>            <span class="s0">while </span>(<span class="s0">true</span>) {
+<a name="l61"><span class="ln">61   </span></a>                <span class="s0">try </span>{
+<a name="l62"><span class="ln">62   </span></a>                    String line;
+<a name="l63"><span class="ln">63   </span></a>                    <span class="s0">if </span>(localInput.ready())
+<a name="l64"><span class="ln">64   </span></a>                        <span class="s0">if </span>((line = localInput.readLine()) != <span class="s0">null</span>)
+<a name="l65"><span class="ln">65   </span></a>                            localExecutor.executeCommand(<a href="../../com/company/ui/CommandReader.java.html">CommandReader</a>.readCommandFromString(internalUser,line));
+<a name="l66"><span class="ln">66   </span></a>                    selector.select(<span class="s5">1500</span>);
+<a name="l67"><span class="ln">67   </span></a>                    selector.selectedKeys().stream().parallel().forEach(selectionKey -&gt;
+<a name="l68"><span class="ln">68   </span></a>                    {
+<a name="l69"><span class="ln">69   </span></a>                        <span class="s0">try </span>{
+<a name="l70"><span class="ln">70   </span></a>                            <span class="s0">if </span>(selectionKey.isValid())
+<a name="l71"><span class="ln">71   </span></a>                                <span class="s0">if </span>(selectionKey.isReadable())
+<a name="l72"><span class="ln">72   </span></a>                                    responseExecutorService.submit(processCommand(selectionKey));
+<a name="l73"><span class="ln">73   </span></a>                        } <span class="s0">catch </span>(IOException e) {
+<a name="l74"><span class="ln">74   </span></a>                            System.err.println(<span class="s4">&quot;IOException &quot; </span>+ e.getMessage());
+<a name="l75"><span class="ln">75   </span></a>                        } <span class="s0">catch </span>(NullPointerException ignored) {}
+<a name="l76"><span class="ln">76   </span></a>                    });
+<a name="l77"><span class="ln">77   </span></a>                    Executors.newCachedThreadPool().submit(() -&gt; {
+<a name="l78"><span class="ln">78   </span></a>                    });
+<a name="l79"><span class="ln">79   </span></a>                } <span class="s0">catch </span>(IOException e) {
+<a name="l80"><span class="ln">80   </span></a>                    System.err.println(<span class="s4">&quot;IOException &quot; </span>+ e.getMessage());
+<a name="l81"><span class="ln">81   </span></a>                } <span class="s0">catch </span>(Exception e) {
+<a name="l82"><span class="ln">82   </span></a>                    System.err.println(<span class="s4">&quot;Unexpected error: &quot; </span>+ e.getMessage());
+<a name="l83"><span class="ln">83   </span></a>                    e.printStackTrace();
+<a name="l84"><span class="ln">84   </span></a>                    System.exit(-<span class="s5">1</span>);
+<a name="l85"><span class="ln">85   </span></a>                }
+<a name="l86"><span class="ln">86   </span></a>            }
+<a name="l87"><span class="ln">87   </span></a>        } <span class="s0">finally </span>{
+<a name="l88"><span class="ln">88   </span></a>            responseExecutorService.shutdown();
+<a name="l89"><span class="ln">89   </span></a>        }
+<a name="l90"><span class="ln">90   </span></a>    }
+<a name="l91"><span class="ln">91   </span></a>
+<a name="l92"><span class="ln">92   </span></a>    <span class="s2">/**</span>
+<a name="l93"><span class="ln">93   </span></a>     <span class="s2">* Processes a command from client</span>
+<a name="l94"><span class="ln">94   </span></a>   <span class="s2">//  * @param buffer Byte buffer to put data to</span>
+<a name="l95"><span class="ln">95   </span></a>     <span class="s2">* </span><span class="s3">@param </span><span class="s2">key Selection key</span>
+<a name="l96"><span class="ln">96   </span></a>     <span class="s2">* </span><span class="s3">@throws </span><span class="s2">IOException If problem occurred while sending data to client</span>
+<a name="l97"><span class="ln">97   </span></a>     <span class="s2">* </span><span class="s3">@return </span><span class="s2">Server response</span>
+<a name="l98"><span class="ln">98   </span></a>     <span class="s2">*/</span>
+<a name="l99"><span class="ln">99   </span></a>    <span class="s0">private static </span>Runnable processCommand(SelectionKey key)
+<a name="l100"><span class="ln">100  </span></a>            <span class="s0">throws </span>IOException {
+<a name="l101"><span class="ln">101  </span></a>        DatagramChannel client = (DatagramChannel) key.channel();
+<a name="l102"><span class="ln">102  </span></a>        ByteBuffer buffer = ByteBuffer.allocate(<span class="s5">65536</span>);
+<a name="l103"><span class="ln">103  </span></a>        SocketAddress address = client.receive(buffer);
+<a name="l104"><span class="ln">104  </span></a>        <span class="s0">if </span>(address == <span class="s0">null</span>) <span class="s0">throw new </span>NullPointerException(<span class="s4">&quot;Address is null&quot;</span>);
+<a name="l105"><span class="ln">105  </span></a>        <span class="s0">byte</span>[] data = buffer.array();
+<a name="l106"><span class="ln">106  </span></a>        buffer.clear();
+<a name="l107"><span class="ln">107  </span></a>        ObjectInputStream iStream = <span class="s0">new </span>ObjectInputStream(<span class="s0">new </span>ByteArrayInputStream(data));
+<a name="l108"><span class="ln">108  </span></a>        <span class="s0">byte</span>[] response;
+<a name="l109"><span class="ln">109  </span></a>        <span class="s0">try </span>{
+<a name="l110"><span class="ln">110  </span></a>            <a href="../../com/company/ui/CommandReader.java.html">CommandReader.Command</a> command = (<a href="../../com/company/ui/CommandReader.java.html">CommandReader.Command</a>) iStream.readObject();
+<a name="l111"><span class="ln">111  </span></a>            System.out.println(<span class="s4">&quot;[&quot; </span>+ <span class="s0">new </span>SimpleDateFormat(<span class="s4">&quot;HH:mm:ss&quot;</span>).format(<span class="s0">new </span>Date()) + <span class="s4">&quot;] &quot; </span>+ command.user.getUsername() + address.toString() + <span class="s4">&quot;: &quot; </span>+ command.toString() + <span class="s4">&quot;.&quot;</span>);
+<a name="l112"><span class="ln">112  </span></a>            <span class="s2">//Отправляем данные клиенту</span>
+<a name="l113"><span class="ln">113  </span></a>            <span class="s0">try </span>{
+<a name="l114"><span class="ln">114  </span></a>                userExecutor.executeCommand(command);
+<a name="l115"><span class="ln">115  </span></a>                response = outputStream.toByteArray();
+<a name="l116"><span class="ln">116  </span></a>                outputStream.reset();
+<a name="l117"><span class="ln">117  </span></a>            } <span class="s0">catch </span>(IllegalArgumentException e) {
+<a name="l118"><span class="ln">118  </span></a>                response = e.getMessage().getBytes();
+<a name="l119"><span class="ln">119  </span></a>            }
+<a name="l120"><span class="ln">120  </span></a>        } <span class="s0">catch </span>(StreamCorruptedException | ClassNotFoundException e) {
+<a name="l121"><span class="ln">121  </span></a>            System.err.println(e.getMessage());
+<a name="l122"><span class="ln">122  </span></a>            e.printStackTrace();
+<a name="l123"><span class="ln">123  </span></a>            response = <span class="s4">&quot;Server received invalid packet. Please try again.&quot;</span>.getBytes();
+<a name="l124"><span class="ln">124  </span></a>        }
+<a name="l125"><span class="ln">125  </span></a>        <span class="s0">byte</span>[] finalResponse = response;
+<a name="l126"><span class="ln">126  </span></a>        <span class="s0">return </span>()-&gt; {
+<a name="l127"><span class="ln">127  </span></a>            <span class="s0">try </span>{
+<a name="l128"><span class="ln">128  </span></a>                client.send(ByteBuffer.wrap(finalResponse), address);
+<a name="l129"><span class="ln">129  </span></a>            } <span class="s0">catch </span>(IOException e) {
+<a name="l130"><span class="ln">130  </span></a>                System.err.println(<span class="s4">&quot;IOException &quot; </span>+ e.getMessage());
+<a name="l131"><span class="ln">131  </span></a>            }
+<a name="l132"><span class="ln">132  </span></a>        };
+<a name="l133"><span class="ln">133  </span></a>    }
+<a name="l134"><span class="ln">134  </span></a>
+<a name="l135"><span class="ln">135  </span></a>    <span class="s2">/**</span>
+<a name="l136"><span class="ln">136  </span></a>     <span class="s2">* Reads a collection from file</span>
+<a name="l137"><span class="ln">137  </span></a>     <span class="s2">* </span><span class="s3">@see <a href="../../com/company/commands/Read.java.html">Read</a></span>
+<a name="l138"><span class="ln">138  </span></a>     <span class="s2">* </span><span class="s3">@param </span><span class="s2">args Filename</span>
+<a name="l139"><span class="ln">139  </span></a>     <span class="s2">*/</span>
+<a name="l140"><span class="ln">140  </span></a>    <span class="s0">private static void </span>readCollectionFromFile(String[] args) {
+<a name="l141"><span class="ln">141  </span></a>        <span class="s0">if </span>(args.length == <span class="s5">0</span>)
+<a name="l142"><span class="ln">142  </span></a>            System.out.println(<span class="s4">&quot;Input filename not specified by command line argument. Skipping...&quot;</span>);
+<a name="l143"><span class="ln">143  </span></a>        <span class="s0">else </span>{
+<a name="l144"><span class="ln">144  </span></a>            <span class="s0">try </span>{
+<a name="l145"><span class="ln">145  </span></a>                <a href="../../com/company/ui/CommandExecutor.java.html">CommandExecutor</a>.setFile(args[<span class="s5">0</span>]);
+<a name="l146"><span class="ln">146  </span></a>                <span class="s0">try </span>{
+<a name="l147"><span class="ln">147  </span></a>                    System.out.println(<span class="s0">new <a href="../../com/company/commands/Read.java.html">Read</a></span>().execute(internalUser,<span class="s4">&quot;&quot;</span>));
+<a name="l148"><span class="ln">148  </span></a>                } <span class="s0">catch </span>(Exception e) {
+<a name="l149"><span class="ln">149  </span></a>                    System.out.println(e.getMessage() + <span class="s4">&quot; Skipping...&quot;</span>);
+<a name="l150"><span class="ln">150  </span></a>                }
+<a name="l151"><span class="ln">151  </span></a>            } <span class="s0">catch </span>(NullPointerException e) {
+<a name="l152"><span class="ln">152  </span></a>                System.out.println(<span class="s4">&quot;Input filename is empty. Skipping...&quot;</span>);
+<a name="l153"><span class="ln">153  </span></a>            }
+<a name="l154"><span class="ln">154  </span></a>        }
+<a name="l155"><span class="ln">155  </span></a>    }
+<a name="l156"><span class="ln">156  </span></a>}
+<a name="l157"><span class="ln">157  </span></a></pre>
+</body>
+</html>
