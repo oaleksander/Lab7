@@ -3,6 +3,7 @@ package com.company;
 import com.company.commands.Read;
 import com.company.ui.CommandExecutor;
 import com.company.ui.CommandReader;
+import com.company.ui.User;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -13,6 +14,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.*;
 
 /**
  * Main client class
@@ -23,6 +25,7 @@ public class Server {
     private static final PrintStream serverResponseStream = new PrintStream(outputStream);
     private static final CommandExecutor localExecutor = new CommandExecutor(CommandExecutor.allCommands, System.out);
     private static final CommandExecutor userExecutor = new CommandExecutor(CommandExecutor.userCommands, serverResponseStream);
+    public static final User internalUser = new User("admin","admin");
 
     /**
      * Main server function
@@ -50,40 +53,56 @@ public class Server {
             e.printStackTrace();
             System.exit(-1);
         }
+        ExecutorService responseExecutorService = Executors.newCachedThreadPool();
         System.out.println("Server is active.");
-        while (true) {
-            try {
-                String line;
-                if (localInput.ready())
-                    if ((line = localInput.readLine()) != null)
-                        localExecutor.execute(CommandReader.readCommandFromString(line));
-                selector.select(1500);
-                for (SelectionKey key : selector.selectedKeys()) {
-                    if (!key.isValid()) continue;
-                    if (key.isReadable()) answerCommand(byteBuffer, key);
+        try {
+            while (true) {
+                try {
+                    String line;
+                    if (localInput.ready())
+                        if ((line = localInput.readLine()) != null)
+                            localExecutor.execute(CommandReader.readCommandFromString(internalUser,line));
+                    selector.select(1500);
+                    selector.selectedKeys().stream().parallel().forEach(selectionKey ->
+                    {
+                        try {
+                            if (selectionKey.isValid())
+                                if (selectionKey.isReadable())
+                                    responseExecutorService.submit(processCommand(selectionKey));
+                        } catch (IOException e) {
+                            System.err.println("IOException " + e.getMessage());
+                        } catch (NullPointerException ignored) {}
+                    });
+                    Executors.newCachedThreadPool().submit(() -> {
+                    });
+                } catch (IOException e) {
+                    System.err.println("IOException " + e.getMessage());
+                } catch (Exception e) {
+                    System.err.println("Unexpected error: " + e.getMessage());
+                    e.printStackTrace();
+                    System.exit(-1);
                 }
-            } catch (IOException e) {
-                System.err.println("IOException " + e.getMessage());
-            } catch (Exception e) {
-                System.err.println("Unexpected error: " + e.getMessage());
-                e.printStackTrace();
-                System.exit(-1);
             }
+        } finally {
+            responseExecutorService.shutdown();
         }
     }
 
     /**
-     * Answers a command from client
-     * @param buffer Byte buffer to put data to
+     * Processes a command from client
+   //  * @param buffer Byte buffer to put data to
      * @param key Selection key
      * @throws IOException If problem occurred while sending data to client
+     * @return Server response
      */
-    private static void answerCommand(ByteBuffer buffer, SelectionKey key)
+    private static Runnable processCommand(SelectionKey key)
             throws IOException {
         DatagramChannel client = (DatagramChannel) key.channel();
+        ByteBuffer buffer = ByteBuffer.allocate(65536);
         SocketAddress address = client.receive(buffer);
-        if (address == null) return;
+        if (address == null) throw new NullPointerException("Address is null");
         byte[] data = buffer.array();
+        buffer.clear();
         ObjectInputStream iStream = new ObjectInputStream(new ByteArrayInputStream(data));
         byte[] response;
         try {
@@ -102,9 +121,14 @@ public class Server {
             e.printStackTrace();
             response = "Server received invalid packet. Please try again.".getBytes();
         }
-
-        client.send(ByteBuffer.wrap(response), address);
-        buffer.clear();
+        byte[] finalResponse = response;
+        return ()-> {
+            try {
+                client.send(ByteBuffer.wrap(finalResponse), address);
+            } catch (IOException e) {
+                System.err.println("IOException " + e.getMessage());
+            }
+        };
     }
 
     /**
@@ -119,7 +143,7 @@ public class Server {
             try {
                 CommandExecutor.setFile(args[0]);
                 try {
-                    System.out.println(new Read().execute());
+                    System.out.println(new Read().execute(internalUser,""));
                 } catch (Exception e) {
                     System.out.println(e.getMessage() + " Skipping...");
                 }

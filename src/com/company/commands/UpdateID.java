@@ -2,6 +2,7 @@ package com.company.commands;
 
 import com.company.storables.DragonHolder;
 import com.company.storables.DragonUtils;
+import com.company.ui.User;
 
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -24,7 +25,7 @@ public class UpdateID implements CommandAction {
     }
 
     @Override
-    public String execute(String argument) {
+    public String execute(User commandedUser, String argument) {
         long id;
         try {
             id = Long.parseLong(argument);
@@ -45,7 +46,10 @@ public class UpdateID implements CommandAction {
         });
         if (!found.get()) throw new IllegalArgumentException("Dragon with id '" + argument + "' not found");
         else
-            DragonHolder.getCollection().put(dragonKey.get(), DragonUtils.inputDragonFromConsole(dragonId.get(), dragonCreationDate.get()));
+            if(!DragonHolder.getCollection().get(dragonKey.get()).getOwner().equals(commandedUser.getUsername()))
+                throw new IllegalArgumentException("Unauthorized Dragon access with id " + dragonId.get() +".");
+            else
+            DragonHolder.getCollection().put(dragonKey.get(), DragonUtils.inputDragonFromConsole(commandedUser, dragonId.get(), dragonCreationDate.get()));
         return "Update successful.";
     }
 }

@@ -2,6 +2,7 @@ package com.company.commands;
 
 import com.company.storables.DragonHolder;
 import com.company.ui.CommandExecutor;
+import com.company.ui.User;
 
 import java.io.*;
 
@@ -18,7 +19,7 @@ public class Save implements CommandAction {
     }
 
     @Override
-    public String execute(String argument) {
+    public String execute(User commandedUser, String argument) {
         File file = CommandExecutor.getFile();
         try {
             file.createNewFile();

@@ -3,6 +3,7 @@ package com.company.commands;
 import com.company.storables.Dragon;
 import com.company.storables.DragonHolder;
 import com.company.storables.DragonUtils;
+import com.company.ui.User;
 
 import java.util.Date;
 
@@ -23,7 +24,7 @@ public class CsvReplaceIfGreaterAge implements CommandAction {
     }
 
     @Override
-    public String execute(String argument) {
+    public String execute(User commandedUser, String argument) {
         int key;
         if (!argument.isBlank()) {
             String[] splitLine = argument.split(",", 2);
@@ -34,6 +35,8 @@ public class CsvReplaceIfGreaterAge implements CommandAction {
                 Dragon currentDragon = DragonHolder.getCollection().get(key);
                 if (currentDragon == null)
                     throw new IllegalArgumentException("No Dragon found with key \"" + key + "\".");
+                if(!currentDragon.getOwner().equals(commandedUser.getUsername()))
+                    throw new IllegalArgumentException("Unauthorized Dragon access with id " + currentDragon.getId() +".");
                 Dragon newDragon = new Dragon(splitLine[1]);
                 newDragon.setId(DragonUtils.getNewId());
                 newDragon.setCreationDate(new Date());

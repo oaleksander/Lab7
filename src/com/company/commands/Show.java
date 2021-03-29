@@ -2,6 +2,7 @@ package com.company.commands;
 
 import com.company.storables.Dragon;
 import com.company.storables.DragonHolder;
+import com.company.ui.User;
 
 import java.util.Comparator;
 
@@ -16,7 +17,7 @@ public class Show implements CommandAction {
         return "Show all collection elements.";
     }
 
-    public String execute(String argument) {
+    public String execute(User commandedUser, String argument) {
         response = "Collection:\n";
         DragonHolder.getCollection().values().stream().sorted(Comparator.comparing(Dragon::getName)).forEach(element -> response += element.toString() + "\n");
         return response.substring(0, response.length() - 1);

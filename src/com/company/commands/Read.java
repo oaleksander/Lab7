@@ -3,6 +3,7 @@ package com.company.commands;
 import com.company.storables.Dragon;
 import com.company.storables.DragonHolder;
 import com.company.ui.CommandExecutor;
+import com.company.ui.User;
 
 import java.io.*;
 import java.util.Arrays;
@@ -22,7 +23,7 @@ public class Read implements CommandAction {
     }
 
     @Override
-    public String execute(String argument) {
+    public String execute(User commandedUser, String argument) {
         response = "";
         File file = CommandExecutor.getFile();
         try {

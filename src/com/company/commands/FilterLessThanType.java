@@ -4,6 +4,7 @@ import com.company.storables.Coordinates;
 import com.company.storables.Dragon;
 import com.company.storables.DragonHead;
 import com.company.storables.DragonHolder;
+import com.company.ui.User;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -27,7 +28,7 @@ public class FilterLessThanType implements CommandAction {
         return "Filter all elements that have {type} less than {value}.";
     }
 
-    public String execute(String argument) {
+    public String execute(User commandedUser, String argument) {
         String[] arguments;
         try {
             arguments = argument.split(" ", 2);

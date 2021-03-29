@@ -1,5 +1,7 @@
 package com.company.storables;
 
+import com.company.ui.User;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
@@ -16,6 +18,7 @@ public class Dragon implements Comparable<Dragon> {
     private int weight; //Значение поля должно быть больше 0
     private DragonType type; //Поле не может быть null
     private DragonHead head;
+    private String owner;
 
     /**
      * Converts CSV format string to Dragon
@@ -67,6 +70,7 @@ public class Dragon implements Comparable<Dragon> {
                 throw new IllegalArgumentException("Can't parse Dragon type from " + splitString[8] + ".");
             }
             setHead(new DragonHead(splitString[9]));
+            setOwner(splitString[10].isBlank() ? "\"\"" : splitString[10].replaceAll("\"", ""));
         } catch (IndexOutOfBoundsException e) {
             throw new IllegalArgumentException("Not enough arguments to parse Dragon (" + splitString.length + ").");
         }
@@ -81,7 +85,6 @@ public class Dragon implements Comparable<Dragon> {
 
     /**
      * Dragon constructor with fields
-     *
      * @param id           id
      * @param name         name
      * @param coordinates  coordinates
@@ -91,8 +94,9 @@ public class Dragon implements Comparable<Dragon> {
      * @param weight       weight
      * @param type         type
      * @param head         head
+     * @param owner        owner
      */
-    public Dragon(long id, String name, Coordinates coordinates, Date creationDate, long age, String description, int weight, DragonType type, DragonHead head) {
+    public Dragon(long id, String name, Coordinates coordinates, Date creationDate, long age, String description, int weight, DragonType type, DragonHead head, String owner) {
         setId(id);
         setName(name);
         setCoordinates(coordinates);
@@ -102,6 +106,7 @@ public class Dragon implements Comparable<Dragon> {
         setWeight(weight);
         setType(type);
         setHead(head);
+        setOwner(owner);
     }
 
     /**
@@ -303,6 +308,24 @@ public class Dragon implements Comparable<Dragon> {
     }
 
     /**
+     * Dragon owner getter
+     *
+     * @return owner
+     */
+    public String getOwner() {
+        return owner;
+    }
+
+    /**
+     * Dragon owner setter
+     *
+     * @param owner new owner;
+     */
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    /**
      * Dragon - to - string converter
      *
      * @return dragon string
@@ -318,7 +341,8 @@ public class Dragon implements Comparable<Dragon> {
                 ", description='" + description + '\'' +
                 ", weight=" + weight +
                 ", type=" + type +
-                ", head=" + head;
+                ", head=" + head +
+                ", owner=" + owner;
     }
 
     /**
@@ -327,6 +351,6 @@ public class Dragon implements Comparable<Dragon> {
      * @return CSV string
      */
     public String toCsvString() {
-        return getId() + ",\"" + getName() + "\"," + getCoordinates().getX() + "," + getCoordinates().getY() + "," + DateFormat.getDateInstance(DateFormat.SHORT).format(getCreationDate()) + "," + getAge() + ",\"" + (getDescription() == null ? "" : getDescription()) + "\"," + getWeight() + "," + getType().getLabel() + "," + getHead().getEyesCount();
+        return getId() + ",\"" + getName() + "\"," + getCoordinates().getX() + "," + getCoordinates().getY() + "," + DateFormat.getDateInstance(DateFormat.SHORT).format(getCreationDate()) + "," + getAge() + ",\"" + (getDescription() == null ? "" : getDescription()) + "\"," + getWeight() + "," + getType().getLabel() + "," + getHead().getEyesCount() + ",\"" + getOwner() + "\"";
     }
 }

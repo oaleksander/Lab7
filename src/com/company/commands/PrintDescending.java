@@ -2,6 +2,7 @@ package com.company.commands;
 
 import com.company.storables.Dragon;
 import com.company.storables.DragonHolder;
+import com.company.ui.User;
 
 import java.util.Comparator;
 
@@ -16,7 +17,7 @@ public class PrintDescending implements CommandAction {
         return "Show all collection elements sorted by age.";
     }
 
-    public String execute(String argument) {
+    public String execute(User commandedUser, String argument) {
         response = "Sorted collection:\n";
         DragonHolder.getCollection().values().stream().sorted(Comparator.comparingLong(Dragon::getAge).reversed())
                 .forEachOrdered(element -> response += element.toString() + "\n");

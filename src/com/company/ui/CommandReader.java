@@ -1,5 +1,7 @@
 package com.company.ui;
 
+import com.company.Server;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,27 +37,29 @@ public class CommandReader {
     /**
      * Get a command from string
      *
+     * @param user User
      * @param singleString string to parse from
      * @return Command
      */
-    public static Command readCommandFromString(String singleString) {
-        return (readCommandFromString(singleString.split(" ", 2)));
+    public static Command readCommandFromString(User user, String singleString) {
+        return (readCommandFromString(user,singleString.split(" ", 2)));
     }
 
     /**
      * Get a command from strings
      *
+     * @param user User
      * @param input strings to parse from
      * @return Command
      */
-    public static Command readCommandFromString(String[] input) {
+    public static Command readCommandFromString(User user, String[] input) {
         if (input.length != 0) {
             input[0] = input[0].toLowerCase();
             if (input.length > 1)
-                return new Command(input[0], input[1]);
+                return new Command(user,input[0], input[1]);
             else
-                return new Command(input[0]);
-        } else return new Command();
+                return new Command(user,input[0]);
+        } else return new Command(user);
     }
 
     /**
@@ -75,48 +79,52 @@ public class CommandReader {
     /**
      * Get a command from Buffered Reader
      *
+     * @param user User
      * @return Command
      */
-    public Command readCommandFromBufferedReader() {
-        return readCommandFromString(getStringFromBufferedReader());
+    public Command readCommandFromBufferedReader(User user) {
+        return readCommandFromString(user,getStringFromBufferedReader());
     }
 
     /**
      * User command class
      */
     public static class Command implements Serializable {
-        public String CommandString = "";
-        public String ArgumentString = "";
+        public User user;
+        public String commandString = "";
+        public String argumentString = "";
 
         /**
          * User command constructor with argument
          *
-         * @param CommandString  Command
-         * @param ArgumentString Argument
+         * @param user User
+         * @param commandString  Command
+         * @param argumentString Argument
          */
-        public Command(String CommandString, String ArgumentString) {
-            this.CommandString = CommandString;
-            this.ArgumentString = ArgumentString;
+        public Command(User user, String commandString, String argumentString) {
+            this.user = user;
+            this.commandString = commandString;
+            this.argumentString = argumentString;
         }
 
         /**
          * User command constructor without argument
          *
+         * @param user User
          * @param CommandString Command
          */
-        public Command(String CommandString) {
-            this.CommandString = CommandString;
+        public Command(User user, String CommandString) {
+            this.user = user;
+            this.commandString = CommandString;
         }
 
-        /**
-         * Empty user command constructor
-         */
-        public Command() {
+        public Command(User user) {
+            this.user = user;
         }
 
         @Override
         public String toString() {
-            return "Command{" + CommandString + (ArgumentString.isBlank() ? "" : " ") + ArgumentString + "}";
+            return "Command{" + commandString + (argumentString.isBlank() ? "" : " ") + argumentString + "}";
         }
     }
 }

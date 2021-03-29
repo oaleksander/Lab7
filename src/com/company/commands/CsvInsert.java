@@ -2,6 +2,7 @@ package com.company.commands;
 
 import com.company.storables.Dragon;
 import com.company.storables.DragonHolder;
+import com.company.ui.User;
 
 public class CsvInsert implements CommandAction {
     public String getLabel() {
@@ -16,7 +17,7 @@ public class CsvInsert implements CommandAction {
         return "Insert new {Dragon} to collection with a {key} (CSV style).";
     }
 
-    public String execute(String argument) {
+    public String execute(User commandedUser, String argument) {
         if (!argument.isBlank()) {
             String[] splitLine = argument.split(",", 2);
             if (splitLine.length < 2)

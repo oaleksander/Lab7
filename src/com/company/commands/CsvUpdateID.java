@@ -2,6 +2,7 @@ package com.company.commands;
 
 import com.company.storables.Dragon;
 import com.company.storables.DragonHolder;
+import com.company.ui.User;
 
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -24,7 +25,7 @@ public class CsvUpdateID implements CommandAction {
     }
 
     @Override
-    public String execute(String argument) {
+    public String execute(User commandedUser, String argument) {
         Dragon newDragon = new Dragon(argument);
         AtomicBoolean found = new AtomicBoolean(false);
         AtomicReference<Integer> dragonKey = new AtomicReference<>();
@@ -32,6 +33,8 @@ public class CsvUpdateID implements CommandAction {
         AtomicReference<Date> dragonCreationDate = new AtomicReference<>();
         DragonHolder.getCollection().forEach((key, value) -> {
             if (value.getId() == newDragon.getId()) {
+                if(!value.getOwner().equals(commandedUser.getUsername()))
+                    throw new IllegalArgumentException("Unauthorized Dragon access with id " + value.getId() +".");
                 dragonKey.set(key);
                 dragonId.set(value.getId());
                 dragonCreationDate.set(value.getCreationDate());

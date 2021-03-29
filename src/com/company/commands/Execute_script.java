@@ -1,7 +1,9 @@
 package com.company.commands;
 
+import com.company.Server;
 import com.company.ui.CommandExecutor;
 import com.company.ui.CommandReader;
+import com.company.ui.User;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -24,7 +26,7 @@ public class Execute_script implements CommandAction {
     }
 
     @Override
-    public String execute(String argument) {
+    public String execute(User commandedUser, String argument) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         File file;
@@ -55,7 +57,7 @@ public class Execute_script implements CommandAction {
                                 .replaceAll("\\breplace_if_greater\\b", "replace_if_greater_csv")
                                 .replaceAll("\\bupdate\\b", "update_csv")
                                 .replaceAll("\\binsert\\b", "insert_csv");
-                        commandExecutor.execute(CommandReader.readCommandFromString(formattedLine));
+                        commandExecutor.execute(CommandReader.readCommandFromString(Server.internalUser, formattedLine));
                     });
             fileReader.close();
         } catch (FileNotFoundException e) {

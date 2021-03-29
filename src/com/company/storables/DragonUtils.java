@@ -1,6 +1,7 @@
 package com.company.storables;
 
 import com.company.ui.CommandReader;
+import com.company.ui.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,19 +32,21 @@ public class DragonUtils {
      *
      * @return new Dragon
      */
-    public static Dragon inputNewDragonFromConsole() {
-        return inputDragonFromConsole(getNewId(), new Date());
+    public static Dragon inputNewDragonFromConsole(User owner) {
+        return inputDragonFromConsole(owner,getNewId(), new Date());
     }
 
     /**
      * Update dragon from Console (System.in), with existing id and
      *
-     * @param id
-     * @param creationDate
-     * @return
+     * @param owner        creator
+     * @param id           id
+     * @param creationDate creation date
+     * @return new dragon
      */
-    public static Dragon inputDragonFromConsole(long id, Date creationDate) {
+    public static Dragon inputDragonFromConsole(User owner, long id, Date creationDate) {
         Dragon dragon = new Dragon();
+        dragon.setOwner(owner.getUsername());
         dragon.setId(id);
         System.out.println("Please input {Name} {Age} [Description] {Weight}.");
         String name = "";

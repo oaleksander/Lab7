@@ -1,6 +1,7 @@
 package com.company.commands;
 
 import com.company.storables.DragonHolder;
+import com.company.ui.User;
 
 public class Clear implements CommandAction {
     public String getLabel() {
@@ -12,7 +13,7 @@ public class Clear implements CommandAction {
     }
 
     @Override
-    public String execute(String argument) {
+    public String execute(User commandedUser, String argument) {
         DragonHolder.getCollection().clear();
         return "Collection cleared.";
     }

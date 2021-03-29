@@ -1,5 +1,7 @@
 package com.company.commands;
 
+import com.company.ui.User;
+
 public class Exit implements CommandAction {
 
     @Override
@@ -11,7 +13,7 @@ public class Exit implements CommandAction {
         return "Exit the program (without saving).";
     }
 
-    public String execute(String argument) {
+    public String execute(User commandedUser, String argument) {
         System.exit(0);
         return "Exited.";
     }

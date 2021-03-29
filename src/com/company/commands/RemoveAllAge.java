@@ -1,6 +1,7 @@
 package com.company.commands;
 
 import com.company.storables.DragonHolder;
+import com.company.ui.User;
 
 import java.util.LinkedList;
 
@@ -21,7 +22,7 @@ public class RemoveAllAge implements CommandAction {
     }
 
     @Override
-    public String execute(String argument) {
+    public String execute(User commandedUser, String argument) {
         long age;
         if (argument == null || argument.isEmpty())
             throw new IllegalArgumentException("Please specify Dragon age.");
@@ -32,7 +33,7 @@ public class RemoveAllAge implements CommandAction {
         }
         LinkedList<Integer> toRemove = new LinkedList<>();
         DragonHolder.getCollection().forEach((key, dragon) -> {
-            if (dragon.getAge() == age) toRemove.add(key);
+            if (dragon.getAge() == age && dragon.getOwner().equals(commandedUser.getUsername())) toRemove.add(key);
         });
         toRemove.forEach(key -> DragonHolder.getCollection().remove(key));
         return "Removed " + toRemove.size() + " Dragons.";

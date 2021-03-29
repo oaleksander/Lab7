@@ -2,6 +2,7 @@ package com.company.commands;
 
 import com.company.storables.DragonHolder;
 import com.company.storables.DragonUtils;
+import com.company.ui.User;
 
 public class Insert implements CommandAction {
     public String getLabel() {
@@ -16,11 +17,11 @@ public class Insert implements CommandAction {
         return "Insert new {element} to collection with a {key}.";
     }
 
-    public String execute(String argument) {
+    public String execute(User commandedUser, String argument) {
         if (argument == null || argument.isEmpty())
             throw new IllegalArgumentException("Please specify Dragon key.");
         try {
-            DragonHolder.getCollection().put(Integer.parseInt(argument), DragonUtils.inputNewDragonFromConsole());
+            DragonHolder.getCollection().put(Integer.parseInt(argument), DragonUtils.inputNewDragonFromConsole(commandedUser));
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Illegal key: " + e.getMessage() + ".");
         }
