@@ -1,10 +1,9 @@
 package com.company.commands;
 
-import com.company.ui.CommandExecutor;
+import com.company.Server;
 import com.company.ui.User;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class Register implements CommandAction{
 
@@ -33,11 +32,11 @@ public class Register implements CommandAction{
             newUser = new User(arguments[0]);
         else
             return "Failed to register. Did you input valid username and password? Try typing register {username} [password] to try again.";
-        if(CommandExecutor.registeredUsers.stream().anyMatch(newUser::equals))
+        if(Server.registeredUsers.stream().anyMatch(newUser::equals))
             return "Logged in successfully.";
-        if (CommandExecutor.registeredUsers.stream().anyMatch(user -> user.getUsername().equals(newUser.getUsername()) && !Arrays.equals(user.getPasswordMD5(), newUser.getPasswordMD5())))
+        if (Server.registeredUsers.stream().anyMatch(user -> user.getUsername().equals(newUser.getUsername()) && !Arrays.equals(user.getPasswordMD5(), newUser.getPasswordMD5())))
             return "Wrong password. Further commands will not be accepted. Try typing register {username} [password] to try again.";
-        CommandExecutor.registeredUsers.add(newUser);
+        Server.registeredUsers.add(newUser);
         return "Registered new user successfully.";
     }
 }

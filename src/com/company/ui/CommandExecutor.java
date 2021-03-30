@@ -1,20 +1,16 @@
 package com.company.ui;
 
+import com.company.Server;
 import com.company.commands.*;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Main command execution runnable
  */
 public class CommandExecutor {
-
-    public static final List<User> registeredUsers = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * All possible commands
@@ -132,7 +128,7 @@ public class CommandExecutor {
      */
     public void executeCommand(CommandReader.Command command) {
         AtomicReference<String> response = new AtomicReference<>("Command gave no response.");
-        if(registeredUsers.stream().noneMatch(user -> user.equals(command.user)) && !command.commandString.equals("register")) {
+        if(Server.registeredUsers.stream().noneMatch(user -> user.equals(command.user)) && !command.commandString.equals("register") && false) {
             response.set("Unauthorized access denied.");
         } else {
             if (Arrays.stream(availableCommands).parallel().noneMatch(availableCommand -> availableCommand.getLabel().equals(command.commandString))) {

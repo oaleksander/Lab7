@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b5ca02d5-96b5-405d-a8c0-b41b65105589" name="Default Changelist" comment="Fixed unauthorized rejection">
-      <change afterPath="$PROJECT_DIR$/diagram.uml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/Lab7_jar/Lab7.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Lab7_jar/Lab7.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/company/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/commands/Exit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/commands/Exit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/commands/Register.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/commands/Register.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/ui/CommandExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/ui/CommandExecutor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +72,9 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\muram\IdeaProjects\Lab5\test" />
     </key>
+    <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="com.company.Server" />
+    </key>
     <key name="ExtractSuperBase.RECENT_KEYS">
       <recent name="com.company.Actions" />
     </key>
@@ -75,7 +82,7 @@
       <recent name="com.company.Actions" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Client">
+  <component name="RunManager" selected="Application.Server">
     <configuration name="Client" type="Application" factoryName="Application" singleton="false">
       <option name="MAIN_CLASS_NAME" value="com.company.Client" />
       <module name="Lab7" />
@@ -83,7 +90,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Server" type="Application" factoryName="Application" temporary="true">
+    <configuration name="Server" type="Application" factoryName="Application" singleton="false" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.company.Server" />
       <module name="Lab7" />
       <option name="PROGRAM_PARAMETERS" value="C:\Users\muram\IdeaProjects\Lab7\test\file.csv" />
@@ -135,6 +142,8 @@
       <workItem from="1617024225535" duration="283000" />
       <workItem from="1617024533384" duration="5051000" />
       <workItem from="1617029786115" duration="11127000" />
+      <workItem from="1617101267759" duration="194000" />
+      <workItem from="1617101479994" duration="3504000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1606397192565</created>

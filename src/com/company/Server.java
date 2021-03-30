@@ -1,6 +1,7 @@
 package com.company;
 
 import com.company.commands.Read;
+import com.company.storables.DragonHolder;
 import com.company.ui.CommandExecutor;
 import com.company.ui.CommandReader;
 import com.company.ui.User;
@@ -13,8 +14,9 @@ import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.*;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Main server class
@@ -22,6 +24,8 @@ import java.util.concurrent.*;
  */
 public class Server {
 
+    public static final List<User> registeredUsers = Collections.synchronizedList(new ArrayList<>());
+    public static final File registeredUsersFile = new File("C:\\Users\\muram\\IdeaProjects\\Lab7\\users.txt");
     private static final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private static final PrintStream serverResponseStream = new PrintStream(outputStream);
     private static final CommandExecutor localExecutor = new CommandExecutor(CommandExecutor.allCommands, System.out);
@@ -36,12 +40,11 @@ public class Server {
      * @see Client
      */
     public static void main(String[] args) {
-        System.out.println("Starting Server...");
-        System.out.println("Reading collection from file...");
+        System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Starting Server...");
         readCollectionFromFile(args);
+        readUsersFromFile();
         BufferedReader localInput = new BufferedReader(new InputStreamReader(System.in));
         Selector selector = null;
-        ByteBuffer byteBuffer = ByteBuffer.allocate(65536);
         try {
             selector = Selector.open();
             selector.wakeup();
@@ -50,12 +53,11 @@ public class Server {
             datagramChannel.configureBlocking(false);
             datagramChannel.register(selector, SelectionKey.OP_READ);
         } catch (IOException e) {
-            System.err.println("Failed to start server.");
-            e.printStackTrace();
+            System.err.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Failed to start server. " + e.getMessage() + ".");
             System.exit(-1);
         }
         ExecutorService responseExecutorService = Executors.newCachedThreadPool();
-        System.out.println("Server is active.");
+        System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Server is active.");
         try {
             while (true) {
                 try {
@@ -71,15 +73,15 @@ public class Server {
                                 if (selectionKey.isReadable())
                                     responseExecutorService.submit(processCommand(selectionKey));
                         } catch (IOException e) {
-                            System.err.println("IOException " + e.getMessage());
+                            System.err.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "IOException " + e.getMessage());
                         } catch (NullPointerException ignored) {}
                     });
                     Executors.newCachedThreadPool().submit(() -> {
                     });
                 } catch (IOException e) {
-                    System.err.println("IOException " + e.getMessage());
+                    System.err.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "IOException " + e.getMessage());
                 } catch (Exception e) {
-                    System.err.println("Unexpected error: " + e.getMessage());
+                    System.err.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Unexpected error: " + e.getMessage());
                     e.printStackTrace();
                     System.exit(-1);
                 }
@@ -126,7 +128,7 @@ public class Server {
             try {
                 client.send(ByteBuffer.wrap(finalResponse), address);
             } catch (IOException e) {
-                System.err.println("IOException " + e.getMessage());
+                System.err.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "IOException " + e.getMessage());
             }
         };
     }
@@ -134,22 +136,64 @@ public class Server {
     /**
      * Reads a collection from file
      * @see Read
-     * @param args Filename
+     * @param filename Filename
      */
-    private static void readCollectionFromFile(String[] args) {
-        if (args.length == 0)
-            System.out.println("Input filename not specified by command line argument. Skipping...");
+    private static void readCollectionFromFile(String[] filename) {
+        System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Reading collection from file...");
+        if (filename.length == 0)
+            System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Input filename not specified by command line argument. Skipping...");
         else {
             try {
-                CommandExecutor.setFile(args[0]);
+                CommandExecutor.setFile(filename[0]);
                 try {
                     System.out.println(new Read().execute(internalUser,""));
                 } catch (Exception e) {
-                    System.out.println(e.getMessage() + " Skipping...");
+                    System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + e.getMessage() + " Skipping...");
                 }
             } catch (NullPointerException e) {
-                System.out.println("Input filename is empty. Skipping...");
+                System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Input filename is empty. Skipping...");
             }
         }
+    }
+
+    /**
+     * Reads registered users from file
+     * @see com.company.commands.Exit
+     */
+    private static void readUsersFromFile() {
+        System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Getting registered users...");
+        ArrayList<User> userArrayList = new ArrayList<>();
+        try {
+            BufferedInputStream fileReader = new BufferedInputStream(new FileInputStream(registeredUsersFile));
+            StringBuilder stringBuilder = new StringBuilder();
+            while (fileReader.available() > 0)
+                stringBuilder.append((char) fileReader.read());
+            DragonHolder.getCollection().clear();
+            Arrays.stream(stringBuilder.toString().split("[\\r\\n]+"))
+                    .forEach(line -> {
+                        byte[] data = Base64.getDecoder().decode(line);
+                        try {
+                            ObjectInputStream objectInputStream = new ObjectInputStream(
+                                    new ByteArrayInputStream(data));
+                            User user = (User) objectInputStream.readObject();
+                            userArrayList.add(user);
+                            objectInputStream.close();
+                        } catch (IOException | ClassNotFoundException e) {
+                            System.err.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Error reading from line " + line);
+                            e.printStackTrace();
+                        }
+                    });
+            registeredUsers.clear();
+            System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Found " + userArrayList.size() + " registered users.");
+            registeredUsers.addAll(userArrayList);
+            fileReader.close();
+        } catch (FileNotFoundException e) {
+            System.err.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Can't find file \"" + registeredUsersFile + "\".");
+        } catch (SecurityException e) {
+            System.err.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Can't access file \"" + registeredUsersFile + "\".");
+        } catch (IOException e) {
+            System.err.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Error occurred accessing file \"" + registeredUsersFile + "\".");
+        }
+
     }
 }
