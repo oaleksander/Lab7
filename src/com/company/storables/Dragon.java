@@ -29,7 +29,7 @@ public class Dragon implements Comparable<Dragon> {
     public Dragon(String csvString) throws IllegalArgumentException {
         String[] splitString = csvString.split(",");
         try {
-            if (splitString[0].isBlank())
+            if (splitString[0].chars().allMatch(Character::isWhitespace) || splitString[0].isEmpty())
                 setId(DragonUtils.getNewId());
             else
                 try {
@@ -41,11 +41,11 @@ public class Dragon implements Comparable<Dragon> {
                 }
             setName(splitString[1].replaceAll("\"", ""));
             try {
-                setCoordinates(new Coordinates(splitString[2].isBlank() ? .0 : Double.parseDouble(splitString[2]), Long.parseLong(splitString[3])));
+                setCoordinates(new Coordinates(splitString[2].chars().allMatch(Character::isWhitespace) || splitString[2].isEmpty() ? .0 : Double.parseDouble(splitString[2]), Long.parseLong(splitString[3])));
             } catch (NumberFormatException | NullPointerException e) {
                 throw new IllegalArgumentException("Can't parse Dragon coordinates from " + splitString[2] + "," + splitString[3] + ".");
             }
-            if (splitString[4].isBlank())
+            if (splitString[4].chars().allMatch(Character::isWhitespace) || splitString[4].isEmpty())
                 setCreationDate(new Date());
             else
                 try {
@@ -58,7 +58,7 @@ public class Dragon implements Comparable<Dragon> {
             } catch (NumberFormatException e) {
                 throw new IllegalArgumentException("Can't parse Dragon age from " + splitString[5] + ".");
             }
-            setDescription(splitString[6].isBlank() ? "\"\"" : splitString[6].replaceAll("\"", ""));
+            setDescription(splitString[6].chars().allMatch(Character::isWhitespace) || splitString[6].isEmpty() ? "\"\"" : splitString[6].replaceAll("\"", ""));
             try {
                 setWeight(Integer.parseInt(splitString[7]));
             } catch (NumberFormatException e) {
@@ -70,7 +70,7 @@ public class Dragon implements Comparable<Dragon> {
                 throw new IllegalArgumentException("Can't parse Dragon type from " + splitString[8] + ".");
             }
             setHead(new DragonHead(splitString[9]));
-            setOwner(splitString[10].isBlank() ? "\"\"" : splitString[10].replaceAll("\"", ""));
+            setOwner(splitString[10].chars().allMatch(Character::isWhitespace) || splitString[10].isEmpty() ? "\"\"" : splitString[10].replaceAll("\"", ""));
         } catch (IndexOutOfBoundsException e) {
             throw new IllegalArgumentException("Not enough arguments to parse Dragon (" + splitString.length + ").");
         }

@@ -112,7 +112,7 @@ public class Client {
             return false;
         }
         if (!Arrays.stream(CommandExecutor.userCommands).parallel().filter(command -> command.getLabel().equals(userCommand.commandString)).findAny().get().getArgumentLabel().equals("")
-                && userCommand.argumentString.isBlank()) {
+                && (userCommand.argumentString.chars().allMatch(Character::isWhitespace) || userCommand.argumentString.isEmpty())) {
             System.err.println("Please specify command argument.");
             return false;
         }

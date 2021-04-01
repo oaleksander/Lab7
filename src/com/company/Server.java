@@ -29,7 +29,7 @@ public class Server {
     private static final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     private static final PrintStream serverResponseStream = new PrintStream(outputStream);
     private static final CommandExecutor localExecutor = new CommandExecutor(CommandExecutor.allCommands, System.out);
-    private static final CommandExecutor userExecutor = new CommandExecutor(CommandExecutor.userCommands, serverResponseStream);
+    private static final CommandExecutor userExecutor = new CommandExecutor(CommandExecutor.allCommands, serverResponseStream);
     public static final User internalUser = new User("admin","admin");
 
     /**

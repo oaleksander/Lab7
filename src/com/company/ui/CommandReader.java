@@ -129,7 +129,7 @@ public class CommandReader {
 
         @Override
         public String toString() {
-            return "Command{" + commandString + (argumentString.isBlank() ? "" : " ") + argumentString + "}";
+            return "Command{" + commandString + ((argumentString.chars().allMatch(Character::isWhitespace) || argumentString.isEmpty()) ? "" : " ") + argumentString + "}";
         }
     }
 }

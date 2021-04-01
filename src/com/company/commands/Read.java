@@ -34,7 +34,7 @@ public class Read implements CommandAction {
             DragonHolder.getCollection().clear();
             Arrays.stream(stringBuilder.toString().split("[\\r\\n]+"))
                     .forEach(line -> {
-                        if (!line.isBlank())
+                        if (!line.chars().allMatch(Character::isWhitespace) && !line.isEmpty())
                             try {
                                 String[] splitLine = line.split(",", 2);
                                 if (splitLine.length < 2)

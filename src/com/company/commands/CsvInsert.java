@@ -18,7 +18,7 @@ public class CsvInsert implements CommandAction {
     }
 
     public String execute(User commandedUser, String argument) {
-        if (!argument.isBlank()) {
+        if (!argument.chars().allMatch(Character::isWhitespace) && !argument.isEmpty()) {
             String[] splitLine = argument.split(",", 2);
             if (splitLine.length < 2)
                 throw new IllegalArgumentException("Invalid key,dragon input string: \"" + argument + "\".");

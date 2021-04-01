@@ -8,6 +8,7 @@ import com.company.ui.User;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Execute_script implements CommandAction {
     @Override
@@ -35,7 +36,7 @@ public class Execute_script implements CommandAction {
         } catch (NullPointerException e) {
             throw new IllegalArgumentException("Please specify filename.");
         }
-        if (argument.isBlank())
+        if (argument.chars().allMatch(Character::isWhitespace) || argument.isEmpty())
             throw new IllegalArgumentException("Please specify filename.");
         try {
             if (!file.canRead())
@@ -49,9 +50,9 @@ public class Execute_script implements CommandAction {
             StringBuilder stringBuilder = new StringBuilder();
             while (fileReader.available() > 0)
                 stringBuilder.append((char) fileReader.read());
-            Arrays.stream(stringBuilder.toString().split("[\\r\\n]+"))
+            Arrays.stream(stringBuilder.toString().split("[\\r\\n]+")).filter(Objects::nonNull)
                     .forEach(line -> {
-                        if (!line.isBlank())
+                        if (line.chars().allMatch(Character::isWhitespace) || line.isEmpty())
                             printStream.append(line).append("\n");
                         String formattedLine = line
                                 .replaceAll("\\breplace_if_greater\\b", "replace_if_greater_csv")
@@ -68,6 +69,6 @@ public class Execute_script implements CommandAction {
             throw new IllegalArgumentException("Error occurred accessing file \"" + file + "\".");
         }
         printStream.append("Executed script from file \"").append(argument).append(".");
-        return outputStream.toString(Charset.defaultCharset());
+        return outputStream.toString();
     }
 }
