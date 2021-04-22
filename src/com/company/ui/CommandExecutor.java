@@ -49,19 +49,19 @@ public class CommandExecutor {
             new UpdateID(),
             new RemoveKey(),
             new Clear(),
-            new Execute_script(),
-            new Exit(),
+            //new Execute_script(),
+            //new Exit(),
             new ReplaceIfGreaterAge(),
             new RemoveGreaterKey(),
             new RemoveLowerKey(),
             new RemoveAllAge(),
             new FilterLessThanType(),
             new PrintDescending(),
-            new Register()
+            new Register(),
             //new Read(),
-            //new CsvInsert(),
-            //new CsvUpdateID(),
-            //new CsvReplaceIfGreaterAge()
+            new CsvInsert(),
+            new CsvUpdateID(),
+            new CsvReplaceIfGreaterAge()
     };
     /**
      * Programs that execute_script can use
@@ -128,7 +128,7 @@ public class CommandExecutor {
      */
     public void executeCommand(CommandReader.Command command) {
         AtomicReference<String> response = new AtomicReference<>("Command gave no response.");
-        if(Server.registeredUsers.stream().noneMatch(user -> user.equals(command.user)) && !command.commandString.equals("register") && false) {
+        if(Server.registeredUsers.stream().noneMatch(user -> user.equals(command.user)) && !command.commandString.equals("register")) {
             response.set("Unauthorized access denied.");
         } else {
             if (Arrays.stream(availableCommands).parallel().noneMatch(availableCommand -> availableCommand.getLabel().equals(command.commandString))) {

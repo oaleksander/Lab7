@@ -54,7 +54,7 @@ public class Server {
             datagramChannel.register(selector, SelectionKey.OP_READ);
         } catch (IOException e) {
             System.err.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Failed to start server. " + e.getMessage() + ".");
-            System.exit(-1);
+            System.exit(-2);
         }
         ExecutorService responseExecutorService = Executors.newCachedThreadPool();
         System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Server is active.");
@@ -83,7 +83,7 @@ public class Server {
                 } catch (Exception e) {
                     System.err.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + "Unexpected error: " + e.getMessage());
                     e.printStackTrace();
-                    System.exit(-1);
+                    System.exit(-3);
                 }
             }
         } finally {
@@ -168,7 +168,6 @@ public class Server {
             StringBuilder stringBuilder = new StringBuilder();
             while (fileReader.available() > 0)
                 stringBuilder.append((char) fileReader.read());
-            DragonHolder.getCollection().clear();
             Arrays.stream(stringBuilder.toString().split("[\\r\\n]+"))
                     .forEach(line -> {
                         byte[] data = Base64.getDecoder().decode(line);

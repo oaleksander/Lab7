@@ -89,7 +89,7 @@ public class DragonUtils {
                         coordinates.setY(Long.parseLong(input[0]));
                 } else {
                     coordinates.setX(Double.parseDouble(input[0]));
-                    coordinates.setY(Long.parseLong(input[0]));
+                    coordinates.setY(Long.parseLong(input[1]));
                 }
                 success = true;
             } catch (IllegalArgumentException e) {

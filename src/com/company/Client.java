@@ -1,5 +1,6 @@
 package com.company;
 
+import com.company.storables.Dragon;
 import com.company.storables.DragonUtils;
 import com.company.ui.CommandExecutor;
 import com.company.ui.CommandReader;
@@ -19,7 +20,7 @@ import java.util.Date;
 public class Client {
 
     private static final String[] dragonCommands = {"insert", "update", "replace_if_greater_age"};
-    private static final InetSocketAddress address = new InetSocketAddress("localhost", 3333);
+    private static InetSocketAddress address = new InetSocketAddress("localhost", 3333);
     private static User user = new User("notYetLoggedInUser","");
     private static ByteArrayOutputStream byteArrayOutputStream;
     private static ObjectOutput objectOutput;
@@ -34,7 +35,14 @@ public class Client {
      */
     public static void main(String[] args) {
         BufferedReader cin = new BufferedReader(new InputStreamReader(System.in));
-
+        if(args.length>0)
+            if (!args[0].replaceAll(" ", "").isEmpty())
+                try {
+                    address = new InetSocketAddress(args[0], 3333);
+                } catch (IllegalArgumentException | SecurityException e) {
+                    System.err.println("Address specified (" + args[0] + ") is invalid:" + e.getMessage());
+                }
+        System.out.println("Welcome to interactive Dragon Hashtable server. To get help, enter \"help\".");
         String username;
         String password;
         try {
@@ -62,10 +70,9 @@ public class Client {
             System.out.print(getResponse());
         } catch (IOException e) {
             System.out.println("Can't connect to server.");
-            System.exit(-1);
+            System.exit(-2);
         }
 
-        System.out.println("Welcome to interactive Dragon Hashtable server. To get help, enter \"help\".");
         //noinspection InfiniteLoopStatement
         while (true) {
             CommandReader.Command command = commandReader.readCommandFromBufferedReader(user);
@@ -120,7 +127,7 @@ public class Client {
         String dragonString;
         if (Arrays.stream(dragonCommands).parallel().anyMatch(command -> command.equals(userCommand.commandString))) {
             userCommand.commandString += "_csv";
-            if (userCommand.commandString.equals("update_id_csv")) {
+            if (userCommand.commandString.equals("update_csv")) {
                 try {
                     dragonString = DragonUtils.inputDragonFromConsole(user,Long.parseLong(userCommand.argumentString), date).toCsvString();
                     userCommand.argumentString = dragonString;

@@ -1,53 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b5ca02d5-96b5-405d-a8c0-b41b65105589" name="Default Changelist" comment="Fixed unauthorized rejection">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="b5ca02d5-96b5-405d-a8c0-b41b65105589" name="Default Changelist" comment="JDK8 compat">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/Lab7_server_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client_manifest/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server_manifest/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Lab7_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Lab7_client_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/artifacts/META-INF/MANIFEST.MF" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Lab7_jar/Lab7.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Lab7_jar/Lab7.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lab7/META-INF/MANIFEST.MF" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/Client.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/Server.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Clear.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Clear.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/CommandAction.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/CommandAction.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/CsvInsert.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/CsvInsert.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/CsvReplaceIfGreaterAge.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/CsvReplaceIfGreaterAge.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/CsvUpdateID.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/CsvUpdateID.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Execute_script.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Execute_script.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Exit.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Exit.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/FilterLessThanType.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/FilterLessThanType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Help.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Help.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Info.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Info.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Insert.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Insert.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/PrintDescending.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/PrintDescending.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Read.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Read.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Register.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Register.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/RemoveAllAge.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/RemoveAllAge.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/RemoveGreaterKey.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/RemoveGreaterKey.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/RemoveKey.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/RemoveKey.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/RemoveLowerKey.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/RemoveLowerKey.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/ReplaceIfGreaterAge.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/ReplaceIfGreaterAge.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Save.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Save.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Show.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/Show.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/UpdateID.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/commands/UpdateID.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/storables/Coordinates.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/storables/Coordinates.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/storables/Dragon.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/storables/Dragon.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/storables/DragonHead.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/storables/DragonHead.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/storables/DragonHolder.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/storables/DragonHolder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/storables/DragonType.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/storables/DragonType.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/storables/DragonUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/storables/DragonUtils.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/ui/CommandExecutor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/ui/CommandExecutor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/ui/CommandReader$Command.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/ui/CommandReader$Command.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/ui/CommandReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/ui/CommandReader.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Lab7/com/company/ui/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lab7/com/company/ui/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/company/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Client.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/company/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/company/commands/CsvInsert.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/commands/CsvInsert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/company/commands/CsvReplaceIfGreaterAge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/commands/CsvReplaceIfGreaterAge.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/company/commands/Execute_script.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/commands/Execute_script.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/company/commands/Read.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/commands/Read.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/company/storables/Dragon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/storables/Dragon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/company/ui/CommandReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/ui/CommandReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users.txt" beforeDir="false" afterPath="$PROJECT_DIR$/users.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/storables/DragonUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/storables/DragonUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/ui/CommandExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/ui/CommandExecutor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,11 +69,12 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
@@ -122,10 +94,11 @@
       <recent name="com.company.Actions" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Server">
+  <component name="RunManager" selected="Application.Client">
     <configuration name="Client" type="Application" factoryName="Application" singleton="false">
       <option name="MAIN_CLASS_NAME" value="com.company.Client" />
       <module name="Lab7" />
+      <option name="PROGRAM_PARAMETERS" value="127.0.0.1" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -185,7 +158,9 @@
       <workItem from="1617101267759" duration="194000" />
       <workItem from="1617101479994" duration="3504000" />
       <workItem from="1617106243180" duration="342000" />
-      <workItem from="1617269755224" duration="1741000" />
+      <workItem from="1617269755224" duration="2387000" />
+      <workItem from="1618919660310" duration="962000" />
+      <workItem from="1618990983452" duration="6777000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1606397192565</created>
@@ -264,7 +239,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617041155703</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="JDK8 compat">
+      <created>1617271690761</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1617271690762</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -293,6 +275,7 @@
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Added authorization" />
     <MESSAGE value="Fixed unauthorized rejection" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed unauthorized rejection" />
+    <MESSAGE value="JDK8 compat" />
+    <option name="LAST_COMMIT_MESSAGE" value="JDK8 compat" />
   </component>
 </project>
